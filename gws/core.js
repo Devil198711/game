@@ -2,14 +2,17 @@ class GWS {
     constructor () {
         this.displayWidth = 1366;
         this.displayHeight = 768;
-        this.point = 32;
-        this.pointX = Math.floor(1366 / 32);
-        this.pointY = Math.floor(768 / 32);
+        this.screenPoint = 32;
+        this.screenPointX = Math.floor(1366 / 32);
+        this.screenPointY = Math.floor(768 / 32);
+        this.scenePointX = 0;
+        this.scenePointY = 0;
         this.display;
         this.loopPause = false;
         this.timeStart = 0;
         this.fps = 0.0165;
         this.fpsCount = 0;
+        this.currentScene = {};
     }
     displayInit(block, name = 'game-canvas', width = 1366, height = 768) {
         const display = document.querySelector(block);
@@ -25,15 +28,15 @@ class GWS {
             this.display = canvas;
         }
     }
-    setDisplayPoint(point = 32) {
-        this.point = point;
-        this.pointX = Math.floor(this.displayWidth / this.point);
-        this.pointY = Math.floor(this.displayHeight / this.point);
+    setScreenPoint(point = 32) {
+        this.screenPoint = point;
+        this.screenPointX = Math.floor(this.displayWidth / this.screenPoint);
+        this.screenPointY = Math.floor(this.displayHeight / this.screenPoint);
     }
     getDisplay() {
-        this.display.point = this.point;
-        this.display.pointX = this.pointX;
-        this.display.pointY = this.pointY;
+        this.display.point = this.screenPoint;
+        this.display.pointX = this.screenPointX;
+        this.display.pointY = this.screenPointY;
         this.display.render = this.render;
         this.display.setRender = this.setRender;
         return this.display;
@@ -71,6 +74,10 @@ class GWS {
     loopStop() {
         this.timeStart = 0;
         this.loopPause = true;
+    }
+    createScene(x, y) {
+        this.scenePointX = x;
+        this.scenePointY = y;
     }
 }
 export {GWS};
