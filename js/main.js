@@ -17,4 +17,11 @@ core.setRender(function () {
 });
 // console.log(core);
 // core.render()
+// core.setFPS(30);
 core.loop();
+setTimeout(function () {
+    console.log(core.timeStart);
+    core.loopStop()
+    console.log(core.timeStart);
+    console.log(core.fpsCount);
+}, 1000)

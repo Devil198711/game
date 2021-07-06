@@ -7,6 +7,9 @@ class GWS {
         this.pointY = Math.floor(768 / 32);
         this.display;
         this.loopPause = false;
+        this.timeStart = 0;
+        this.fps = 0.0165;
+        this.fpsCount = 0;
     }
     displayInit(block, name = 'game-canvas', width = 1366, height = 768) {
         const display = document.querySelector(block);
@@ -41,16 +44,33 @@ class GWS {
     setRender(render) {
         this.render = render;
     }
+    setFPS(fps) {
+        this.fps = ((1000 /  fps) * 0.001) - 0.001;
+        console.log(this.fps);
+    }
     loop() {
         let context = this;
         context.loopPause = false;
-        requestAnimationFrame(function () {
-            context.render();
-            context.display.ctx.clearRect(0, 0, context.width, context.height)
+        requestAnimationFrame(function (e) {
+            let time = e * 0.001;
+            let delta = time - context.timeStart;
+            console.log(delta, time);
+            if (delta >= context.fps) {
+                context.timeStart = time;
+                context.fpsCount++;
+                context.display.ctx.clearRect(0, 0, context.width, context.height);
+                context.render();
+            } else {
+                console.log(false);
+            }
             if (!context.loopPause) {
                 context.loop();
             }
         })
+    }
+    loopStop() {
+        this.timeStart = 0;
+        this.loopPause = true;
     }
 }
 export {GWS};
