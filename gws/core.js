@@ -13,8 +13,13 @@ class GWS {
         this.fps = 0.0165;
         this.fpsCount = 0;
         this.currentScene = {};
+        this.clickEvents = {};
+    }
+    addClick(id, obj, action) {
+        this.clickEvents[id] = {x : obj.x, y : obj.y, w : obj.w, h : obj.h, 'action' : action};
     }
     displayInit(block, name = 'game-canvas', width = 1366, height = 768) {
+        let context = this;
         const display = document.querySelector(block);
         if (display) {
             this.displayWidth = width;
@@ -24,6 +29,18 @@ class GWS {
             canvas.height = height;
             canvas.id = name;
             canvas.ctx = canvas.getContext('2d')
+            canvas.addEventListener('click', function (e) {
+                const xz = width / e.target.offsetWidth;
+                const yz = height / e.target.offsetHeight;
+                const x = (e.pageX - e.target.offsetTop) * xz;
+                const y = (e.pageY - e.target.offsetLeft) * yz;
+                for (let i in context.clickEvents) {
+                    let click = context.clickEvents[i];
+                    if (x >= click.x && x <= click.x + click.w && y >= click.y && y <= click.y + click.h) {
+                        click.action();
+                    }
+                }
+            });
             display.appendChild(canvas);
             this.display = canvas;
         }
@@ -57,7 +74,6 @@ class GWS {
         requestAnimationFrame(function (e) {
             let time = e * 0.001;
             let delta = time - context.timeStart;
-            console.log(delta, time);
             if (delta >= context.fps) {
                 context.timeStart = time;
                 context.fpsCount++;
@@ -78,6 +94,10 @@ class GWS {
     createScene(x, y) {
         this.scenePointX = x;
         this.scenePointY = y;
+    }
+    createModal(x, y, w, h, content) {
+        this.display.ctx.fillStyle = '#ddd';
+        this.display.ctx.fillRect(x, y, w, h);
     }
 }
 export {GWS};

@@ -5,23 +5,23 @@ core.displayInit('#main', 'game', 1920, 1080, 64);
 core.setScreenPoint(64);
 const display = core.getDisplay();
 // display.ctx.fillRect(display.screenPoint * 5, display.screenPoint * 6, display.screenPoint, display.screenPoint);
+let turn = {x : 10, y : 10, w : 100, h : 50};
+core.addClick('1', turn, function () {
+    console.log('cl');
+});
+console.log(turn);
+let img = new Image();
+img.src = '../images/back.png';
 core.setRender(function () {
-    for (let z = 0; z <= 3; z++) {
-        for (let y = 0; y <= core.screenPointY; y++) {
-            for (let x = 0; x <= core.screenPointX; x++) {
-                core.display.ctx.fillStyle = `#${Math.floor(Math.random() * 999)}`;
-                core.display.ctx.fillRect(this.screenPoint * x, core.screenPoint * y, core.screenPoint, core.screenPoint);
-            }
-        }
-    }
+    core.display.ctx.drawImage(img, 0, 0, 1920, 1080);
+    core.createModal(1920 / 2 - 500 / 2, 1080 / 2 - 300 / 2, 500, 300);
+    // core.display.ctx.fillStyle = '#ddd';
+    core.display.ctx.fillRect(turn.x, turn.y, turn.w, turn.h);
 });
 // console.log(core);
 // core.render()
 // core.setFPS(30);
 core.loop();
 setTimeout(function () {
-    console.log(core.timeStart);
-    core.loopStop()
-    console.log(core.timeStart);
-    console.log(core.fpsCount);
+
 }, 1000)
