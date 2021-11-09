@@ -21,6 +21,7 @@ class GWS {
     displayInit(block, name = 'game-canvas', width = 1366, height = 768) {
         let context = this;
         const display = document.querySelector(block);
+        display.style.position = 'relative';
         if (display) {
             this.displayWidth = width;
             this.displayHeight = height;
@@ -96,8 +97,25 @@ class GWS {
         this.scenePointY = y;
     }
     createModal(x, y, w, h, content) {
-        this.display.ctx.fillStyle = '#ddd';
-        this.display.ctx.fillRect(x, y, w, h);
+        let ox = this.display.offsetWidth / this.displayWidth;
+        let oy = this.display.offsetHeight / this.displayHeight;
+        let xz = ox * x;
+        let yz = oy * y;
+        let wz = ox * w;
+        let hz = oy * h;
+        const modal = document.createElement('div');
+        modal.classList.add('modal-game');
+        modal.style.position = 'absolute';
+        modal.style.top = `${yz}px`;
+        modal.style.left = `${xz}px`;
+        modal.style.width = `${wz}px`;
+        modal.style.height = `${hz}px`;
+        modal.innerHTML = content;
+        this.display.parentNode.appendChild(modal);
+        modal.style.fontSize = `${ox * Number(window.getComputedStyle(modal).fontSize.replace('px', ''))}px`;
+        modal.querySelectorAll('*').forEach((item) => {
+            item.style.fontSize = `${ox * Number(window.getComputedStyle(item).fontSize.replace('px', ''))}px`;
+        })
     }
 }
 export {GWS};
